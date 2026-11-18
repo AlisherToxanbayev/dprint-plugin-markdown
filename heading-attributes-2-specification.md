@@ -48,7 +48,7 @@ The upstream parser may associate a complete block on its own Setext content lin
 - `tests/specs/headers/Headers_Setext_TextWrap_Always.txt` establishes Setext wrapping conventions; `tests/specs/Text/Text_TextWrap_MaintainAndWrap.txt` expects long ATX headings to remain one line. `tests/spec_test.rs:22` runs applicable fixtures twice.
 - Configuration is named `heading.kind`; its Setext option is applied to level-one and level-two generated headings even when their source style was ATX.
 
-**Inference, not yet executed:** with `textWrap: always`, a Setext soft break may become a space if the line fits. Therefore `Heading {.foo\n.bar}\n==` could become `Heading {.foo .bar}` and acquire classes. The original parser should report no classes because the candidate block contains a physical newline. The required outcome is semantic preservation: keep that content from becoming attribute syntax. The exact formatted output and whether this formatter currently joins this particular input are unverified because `cargo` is unavailable in this environment. Do not report a reproduced defect or confirmed root cause until the focused test runs.
+**Verified by running the formatter:** the Setext input `Heading {.foo\n.bar}\n==` is joined into `# Heading {.foo .bar}` with the default configuration and with `textWrap: always`, and `pulldown-cmark` then reads `foo` and `bar` as classes (see the verified-behavior section). It is not joined with `heading.kind: setext` and `textWrap: maintain`.
 
 Use this test-first sequence when implementation is authorized:
 
@@ -56,6 +56,21 @@ Use this test-first sequence when implementation is authorized:
 2. If a test fails, fix heading generation narrowly: identify only a complete supported suffix, carry it as an indivisible final unit, preserve ordinary brace text and soft-break semantics, and include emitted text in Setext underline measurement.
 3. Add structured parser/AST metadata only if the failing test demonstrates source spans and inline nodes cannot safely preserve the suffix. Do not change paragraphs, lists, global wrapping, or production dependencies without a failing requirement that needs it.
 4. Run focused and existing tests, then confirm second-pass stability. If the tests already pass, make no production change.
+
+## Verified behavior of the current formatter
+
+All results were produced with `cargo test --locked --test specs` (cargo 1.98.0, Windows) and `pulldown-cmark` 0.13.4 with `Options::ENABLE_HEADING_ATTRIBUTES`. The defaults are `heading.kind: atx` and `textWrap: maintain` (`src/configuration/resolve_config.rs`). All rows use `lineWidth: 40`.
+
+| # | `heading.kind` | `textWrap` | Input | Formatter output | Meaning preserved? |
+|---|---|---|---|---|---|
+| 1 | setext | always | `# Heading text here {#my-id .class-one .class-two .class-three}` | `Heading text here {#my-id .class-one` / `.class-two .class-three}` / underline | No: pulldown-cmark reads no ID and no classes |
+| 2 | atx | always | `Heading {.foo` / `.bar}` / `===` | `# Heading {.foo .bar}` | No: the input has no classes, the output has `foo` and `bar` |
+| 3 | atx | maintain (default) | same as row 2 | `# Heading {.foo .bar}` | No: same as row 2 |
+| 4 | setext | maintain | same as row 2 | lines kept, underline added | Yes |
+| 5 | atx | always | long `# ... {#my-id}` | one line, block intact | Yes |
+| 6 | atx | maintain | `Heading` / `{.foo}` / `===` | `# Heading {.foo}` | Yes |
+
+The block is not split by wrapping in ATX output, because ATX headings stay on one line. Splitting happens only for Setext output with `textWrap: always` (row 1). Row 3 shows that ordinary text can become an attribute block with default settings.
 
 ## Semantic and formatter test strategy
 
@@ -121,7 +136,7 @@ Row 15 is the converse of row 8: its input contains a parser-valid, single-line 
 
 - Confirm `pulldown-cmark` 0.13.4 and its heading-attributes extension as the intended assignment dialect and test oracle.
 - Confirm that the meeting’s same-final-line convention applies to all rich inline nodes and to ATX-to-Setext conversion.
-- `cargo` is not installed in this environment. No formatter fixture, parser experiment, focused reproduction, or proposed matrix row has been executed; row 8’s join behavior remains a source-based risk, not a reproduced defect.
+- The proposed matrix rows below were not run as fixtures. Only the cases in the verified-behavior section were executed.
 - The original assignment instructions and November 8 meeting transcript were not available in the inspected workspace. Keep any questions depending on them open.
 
 ## Non-goals
