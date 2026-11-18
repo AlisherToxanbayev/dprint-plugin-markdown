@@ -3,17 +3,19 @@
 | Team member          | One-sentence contribution summary |
 |----------------------|---|
 | [Alisher Toxanbayev] | Led the preparation of the heading-attributes specification by coordinating repository analysis, defining the project scope and regression-test strategy, and incorporating feedback from the human reviewer, Codex, and Claude. |
+| [Azamat Ayapbergenov] | Built and tested the project locally, reproduced the attribute-splitting behavior of the formatter and checked it with pulldown-cmark, and wrote the verified-behavior section of the specification. |
 
 
 ## 2. Individual compile-and-run output
 
 **Required assignment prompt:**
 
-> Verify that you can compile and run the project in the current git repo.
+> Verify that you can build and run the project in the current git repo.
 
 | Team member          | Individual result                           |
 |----------------------|---------------------------------------------|
 | [Alisher Toxanbayev] | TODO: update after cargo will bew installed |
+| [Azamat Ayapbergenov] | On Windows with Rust installed through rustup (cargo 1.98.0), `cargo build --locked` finished successfully and `cargo test --locked` passed all 184 tests across six suites with 0 failures. This was checked manually; no LLM agent was used. |
 
 **Environment note:** In the Codex environment used during the investigation, `command -v cargo` returned no path, so no Rust build or test suite could be run there. This is an environment limitation, not the member's local compile-and-run output.
 
