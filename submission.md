@@ -60,10 +60,11 @@ Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with
 | Round | Findings | Main changes made |
 | ----- | -------- | ----------------- |
 | 1 | 3 | Added the line-break notation to the verified-behavior table; not applied: two claims about matrix rows 20 and 31 that running pulldown-cmark 0.13.4 showed to be wrong. |
+| 2 | 2 | Gave a concrete fixture for row 5 and the exact underline for row 4 of the verified-behavior table. |
 
 #### Last specification review
 
-Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with the prompt below produced the following output; strikethrough indicates LLM output that I deemed incorrect or irrelevant.
+Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with the prompt below produced the following output. No finding was rejected, so nothing is struck through.
 
 > Review only the section named "Verified behavior of the current formatter" in heading-attributes-2-specification.md in the current git repo. Read the rest of the document and the source code only to check claims made in that section, and do not review other sections.
 >
@@ -72,36 +73,28 @@ Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with
 > Look for: contradictions within the section or with the rest of the specification, ambiguities where an implementer would have to guess, table rows whose stated output does not follow from the stated input and configuration, claims that conflict with the existing formatter code or with pulldown-cmark 0.13.4 behavior, and statements that cannot be tested.
 >
 > Report numbered findings in the chat. For each: a one-line title, a severity (high/medium/low), the exact text you are criticising, a short explanation, and a one-sentence minimal fix. End with the number of findings and a one-line list of their titles.
+>
+> Report only findings about text inside that section.
+>
+> Findings already considered and rejected in earlier rounds, which must not be raised again:
+> - Escaped opening brace: pulldown-cmark 0.13.4 gives the class foo for `# \{.foo}` (checked by running it); the row is also outside the section under review.
+> - Vertical tab: pulldown-cmark 0.13.4 gives the single class `a\u{b}.b` (checked by running it); the row is also outside the section under review.
 
-~~1. Escaped opening brace is incorrectly claimed to create an attribute~~
-* ~~Severity: high~~
-* ~~Exact text: "`# \{.foo}` ... H1; class `foo`; parser-specific content retained"~~
-* ~~Explanation: pulldown-cmark 0.13.4 excludes an escaped opening brace during attribute-block extraction, so `\{.foo}` is ordinary text with no class.~~
-* ~~Minimal fix: Change the expected result to no metadata and literal brace text, or remove this proposed row.~~
+1. Row 5 uses an undefined placeholder instead of an executable fixture — Severity: medium
+   * Exact text: `long # ... {#my-id}`
+   * Explanation: `...` does not define the actual heading text or exact line length, so the claim that the ATX output remains on one line and the block stays intact cannot be reproduced as stated.
+   * Minimal fix: Replace the placeholder with a concrete heading string and give the exact expected output line.
+2. Row 4 does not specify the underline width or exact serialization — Severity: low
+   * Exact text: `lines kept, underline added`
+   * Explanation: The existing Setext behavior may select an underline whose width is the longest rendered line, but this row omits both the underline character sequence and its length, making the verified output ambiguous.
+   * Minimal fix: State the exact output, including the underline text and length, for example with explicit `/` line-break notation and the underline line.
 
-Rejected: running pulldown-cmark 0.13.4 with `ENABLE_HEADING_ATTRIBUTES` on `# \{.foo}` gives the class `foo`, as the specification says. The row is also outside the section under review.
+Finding count: 2
 
-~~2. Vertical tab is incorrectly classified as embedded in a class~~
-* ~~Severity: high~~
-* ~~Exact text: "`# H {.a<U+000B>.b}` and `# H {.a<U+2002>.b}` ... Each is one class whose value includes the embedded code point and `.b`; neither character separates tokens"~~
-* ~~Explanation: pulldown-cmark splits attribute blocks with `split_ascii_whitespace`, so U+000B (a vertical tab) separates tokens; U+2002 does not, making the two markers behave differently.~~
-* ~~Minimal fix: Expect `[a]` and `[b]` for vertical tab, and a single class containing the U+2002 and `.b` for EN SPACE.~~
+1. Row 5 uses an undefined placeholder instead of an executable fixture
+2. Row 4 does not specify the underline width or exact serialization
 
-Rejected: running pulldown-cmark 0.13.4 on `# H {.a\u{b}.b}` gives the single class `a\u{b}.b`, as the specification says. The row is also outside the section under review.
-
-3. Verified-table newline notation is ambiguous
-* Severity: low
-* Exact text: "`Heading {.foo` / `.bar}` / `===`" and "`Heading text here ...` / `.class-two ...` / underline"
-* Explanation: The table uses `/` for line breaks, while the later matrix explicitly defines `\n` as the newline notation and does not define `/`, so an implementer could treat it literally.
-* Minimal fix: Replace `/` separators in the verified table with explicit `\n` or state that `/` denotes a physical newline.
-
-3 findings
-
-1. Escaped opening brace is incorrectly claimed to create an attribute
-2. Vertical tab is incorrectly classified as embedded in a class
-3. Verified-table newline notation is ambiguous
-
-Applied: finding 3, by adding "In the table, `/` marks a physical line break." before the table.
+Applied: both findings. Row 5 now uses the heading `# Short words here and there making a line {#my-id}`, and row 4 states the exact output with its 13-character underline.
 
 Final submission
 ----------------

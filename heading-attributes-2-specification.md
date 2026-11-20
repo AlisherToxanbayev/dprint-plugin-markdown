@@ -68,8 +68,8 @@ In the table, `/` marks a physical line break.
 | 1 | setext | always | `# Heading text here {#my-id .class-one .class-two .class-three}` | `Heading text here {#my-id .class-one` / `.class-two .class-three}` / underline | No: pulldown-cmark reads no ID and no classes |
 | 2 | atx | always | `Heading {.foo` / `.bar}` / `===` | `# Heading {.foo .bar}` | No: the input has no classes, the output has `foo` and `bar` |
 | 3 | atx | maintain (default) | same as row 2 | `# Heading {.foo .bar}` | No: same as row 2 |
-| 4 | setext | maintain | same as row 2 | lines kept, underline added | Yes |
-| 5 | atx | always | long `# ... {#my-id}` | one line, block intact | Yes |
+| 4 | setext | maintain | same as row 2 | `Heading {.foo` / `.bar}` / `=============` (13 `=`, the width of the longest line) | Yes |
+| 5 | atx | always | `# Short words here and there making a line {#my-id}` |(one line, 51 characters, block intact) | Yes |
 | 6 | atx | maintain | `Heading` / `{.foo}` / `===` | `# Heading {.foo}` | Yes |
 
 The block is not split by wrapping in ATX output, because ATX headings stay on one line. Splitting happens only for Setext output with `textWrap: always` (row 1). Row 3 shows that ordinary text can become an attribute block with default settings.
