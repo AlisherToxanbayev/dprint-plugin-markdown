@@ -61,6 +61,8 @@ Use this test-first sequence when implementation is authorized:
 
 All results were produced with `cargo test --locked --test specs` (cargo 1.98.0, Windows) and `pulldown-cmark` 0.13.4 with `Options::ENABLE_HEADING_ATTRIBUTES`. The defaults are `heading.kind: atx` and `textWrap: maintain` (`src/configuration/resolve_config.rs`). All rows use `lineWidth: 40`.
 
+In the table, `/` marks a physical line break.
+
 | # | `heading.kind` | `textWrap` | Input | Formatter output | Meaning preserved? |
 |---|---|---|---|---|---|
 | 1 | setext | always | `# Heading text here {#my-id .class-one .class-two .class-three}` | `Heading text here {#my-id .class-one` / `.class-two .class-three}` / underline | No: pulldown-cmark reads no ID and no classes |

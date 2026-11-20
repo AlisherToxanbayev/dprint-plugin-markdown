@@ -1,89 +1,109 @@
-## 1. Team contributions
+Project 2 submission
+====================
 
-| Team member          | One-sentence contribution summary |
-|----------------------|---|
-| [Alisher Toxanbayev] | Led the preparation of the heading-attributes specification by coordinating repository analysis, defining the project scope and regression-test strategy, and incorporating feedback from the human reviewer, Codex, and Claude. |
-| [Azamat Ayapbergenov] | Built and tested the project locally, reproduced the attribute-splitting behavior of the formatter and checked it with pulldown-cmark, and wrote the verified-behavior section of the specification. |
+Team name: dprint heading attributes 2
 
+The specification consists of the file
+[heading-attributes-2-specification.md](heading-attributes-2-specification.md).
 
-## 2. Individual compile-and-run output
+Draft submission
+----------------
 
-**Required assignment prompt:**
+### Alisher Toxanbayev
 
-> Verify that you can build and run the project in the current git repo.
+GitHub userid: AlisherToxanbayev
 
-| Team member          | Individual result                           |
-|----------------------|---------------------------------------------|
-| [Alisher Toxanbayev] | TODO: update after cargo will bew installed |
-| [Azamat Ayapbergenov] | On Windows with Rust installed through rustup (cargo 1.98.0), `cargo build --locked` finished successfully and `cargo test --locked` passed all 184 tests across six suites with 0 failures. This was checked manually; no LLM agent was used. |
+#### Contributions
 
-**Environment note:** In the Codex environment used during the investigation, `command -v cargo` returned no path, so no Rust build or test suite could be run there. This is an environment limitation, not the member's local compile-and-run output.
+Led the preparation of the heading-attributes specification by coordinating repository analysis, defining the project scope and regression-test strategy, and incorporating feedback from the human reviewer, Codex, and Claude.
 
-## 3. Specification review history
+#### Build and run test
 
-| Round | Reviewer | Findings | Summary of changes or result |
-|---|---|---:|---|
-| 1 | Human reviewer | 5 comments | Requested Setext coverage, a precise heading-attribute definition, correction of an inaccurate Markdown example, less repetition, and a concrete implementation strategy. |
-| 2 | Codex self-review, earlier draft | 0 actionable findings reported | Same-context review of an earlier version. Later human/independent reviews identified material issues, so this is retained only as review history, not as proof that the draft was defect-free. |
-| 3 | Claude independent review 1 | 6 numbered findings (1 Critical, 5 Major), plus further observations | Identified undefined attribute grammar, the Setext test-row semantic contradiction, missing ATX-to-Setext investigation, ambiguous inline attachment, unclear width semantics, and incomplete submission records. |
-| 4 | Codex self-review, revised draft | 3 actionable findings | Flagged a weak regression row, incomplete review reconciliation, and unexecuted formatter/parser tests. The test row was subsequently revised; execution remained outstanding. |
-| 5 | Claude independent review 2 | 6 numbered findings (1 Critical, 5 Major), plus further test-matrix observations | Identified over-broad inline-node attachment, reverse promotion of ordinary text into attributes, separator ambiguity, missing recognition-stage decision, semantic canonicalization gaps, and an incomplete review record. |
-| 6 | Codex self-review, latest revision | 3 actionable findings | Flagged a duplicate/incorrect regression case, incomplete Claude-review reconciliation, and the absence of executed formatter/parser tests. The regression case was corrected; execution remains outstanding. |
+TODO (Alisher): summarize the LLM output for the prompt "Verify that you can build and run the project in the current git repo." The Codex environment used earlier had no `cargo`, so that run could not build the project; repeat it now that Rust is installed.
 
-### 3.1 Human reviewer feedback
+#### Specification review rounds
 
-1. “What about setext headings?”
-2. “A heading attribute is additional metadata associated with a Markdown heading.”
-3. “This is wrong. Read the spec.”
-4. “Repetitive”
-5. “This is your job, not the LLMs. You need specific instructions on how to accomplish these goals, which is missing.”
+| Round | Findings | Main changes made |
+| ----- | -------- | ----------------- |
+| 1 | 0 | A same-context Codex review of an earlier draft reported no actionable findings. |
+| 2 | 6 | Claude review: undefined attribute grammar, Setext test-row contradiction, missing ATX-to-Setext check, ambiguous inline attachment, unclear width semantics. |
+| 3 | 3 | Codex review: weak regression row fixed; unexecuted tests and incomplete reconciliation of the Claude report noted. |
+| 4 | 6 | Claude review: over-broad inline attachment, ordinary text promoted to attributes, separator ambiguity, unspecified recognition stage, semantic comparison gaps. |
+| 5 | 3 | Codex review: duplicate regression row corrected; unexecuted tests and incomplete reconciliation noted. |
 
-### 3.2 Latest independent review — Claude Round 2
+#### Last specification review
 
-**Reviewer:** Claude. The exact model/version was not included in the supplied review report.
-
-**Finding count:** 6 numbered findings: 5 Major and 1 Critical, plus additional regression-test observations.
-
-**Reasoning effort:** Not reported in the supplied review artifact.
-
-**Prompt record:** The exact text entered into Claude was not preserved in the review artifact. The review was requested using the independent technical-review brief prepared in this conversation. Because the submitted text cannot be independently verified, no reconstructed wording is presented as a verbatim prompt.
-
-**Verbatim review output:** The complete report is retained in the accompanying file [Independent Review Heading Attributes Preservation (Round 2).md](Independent%20Review%20Heading%20Attributes%20Preservation%20%28Round%202%29.md). It should accompany this submission if the instructor requires the full review transcript.
-
-**Main findings:** The final inline-node attachment rule was too restrictive; ordinary text could become an attribute block after reflow; the separator rule conflicted with the Setext separate-line case; the stage for attribute recognition was unspecified; semantic event canonicalization was incomplete; and the review history in `submission.md` needed correction.
-
-### 3.3 Earlier Codex self-review
-
-**Review type:** Same-context self-review; not independent validation.
-
-**Finding count:** 0 actionable findings were reported in that earlier pass. This was an earlier-draft result and did not establish that the specification had no remaining defects.
-
-### 3.4 Latest Codex self-review
-
-**Review type:** Same-context self-review; not independent validation.
-
-**Finding count:** 3 actionable findings were reported. The final self-review identified a regression-row issue, incomplete reconciliation of Claude's report, and the absence of executed tests. The regression-row issue was corrected; the other limitations are disclosed above.
-
-**Prompt used:**
+Prompting Codex (reported as GPT-6; the exact build identifier and the reasoning effort were not exposed) with the prompt below produced the following output.
 
 > Review `heading-attributes-2-specification.md` and `submission.md` against the current repository. Check the parser grammar and edge cases against the pinned pulldown-cmark 0.13.4 specification; check source claims about heading parsing, output conversion, wrapping and width; inspect test matrix coverage and arithmetic; and assess whether the semantic test compares the complete document without hiding meaningful differences. Identify remaining actionable inaccuracies, contradictions, omissions, and unsupported execution claims. Do not infer missing Claude materials or user/team identity. Return only findings with concrete corrections.
-
-**Actual output recorded by Codex:**
 
 > 1. Row 15 currently repeats the invalid internally split text from row 8 while describing a valid existing attribute block. Replace it with a complete single-line attribute block so this row tests the converse case.
 > 2. Submission review history must not state the Claude round is fully reconciled until the complete report is supplied and checked. The current explicit TODO is appropriate; team member names and individual build outputs also remain required.
 > 3. No formatter/parser behavior or proposed fixture output has been executed because `cargo` is unavailable. Keep the row-8 join behavior labeled as an inference and the entire matrix labeled not run.
 
-**Correction recorded:** Row 15 was changed to use the valid single-line block `Heading {#my-id .foo}` and to assert that formatting does not split it.
+Finding 1 was applied: row 15 now uses the valid single-line block `Heading {#my-id .foo}`. Findings 2 and 3 were accurate at that time.
 
-**Model/version:** Codex reported GPT-6; the exact build identifier was not exposed in the available output.
+### Azamat Ayapbergenov
 
-**Reasoning effort:** Not exposed in the available output.
+GitHub userid: azaayapbergenov
 
-## 4. Specification and implementation status
+#### Contributions
 
-The current specification defines a provisional `pulldown-cmark` heading-attributes dialect; distinguishes ATX, Setext, and ATX-to-Setext behavior; documents attribute-block recognition rules; specifies preservation of the complete trailing block and the final inline formatting unit; defines width in Unicode display columns; and proposes whole-document semantic comparison and formatter regression fixtures.
+Built and tested the project locally, reproduced the attribute-splitting behavior of the formatter and checked it with pulldown-cmark, and wrote the verified-behavior section of the specification.
 
-The production feature has not been implemented. The proposed formatter/parser regression cases have not been executed because `cargo` was unavailable in the Codex environment. The `pulldown-cmark` dialect remains provisional pending instructor confirmation. Repository-specific behavior described in the specification should be treated as source-inspected but not execution-verified until the relevant tests are run.
+#### Build and run test
 
-**Specification:** [heading-attributes-2-specification.md](heading-attributes-2-specification.md)
+Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with "Verify that you can build and run the project in the current git repo." produced this result, summarized: the build and run verification passed. `cargo build --all-features` succeeded, and `cargo test --all-targets` succeeded with all 182 reported tests passing. Copilot noted that the project is a Rust library/plugin rather than a standalone executable, so it was exercised through its tests; a linker message in Russian appeared but the build completed, and no source files were changed.
+
+#### Specification review rounds
+
+| Round | Findings | Main changes made |
+| ----- | -------- | ----------------- |
+| 1 | 3 | Added the line-break notation to the verified-behavior table; not applied: two claims about matrix rows 20 and 31 that running pulldown-cmark 0.13.4 showed to be wrong. |
+
+#### Last specification review
+
+Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with the prompt below produced the following output; strikethrough indicates LLM output that I deemed incorrect or irrelevant.
+
+> Review only the section named "Verified behavior of the current formatter" in heading-attributes-2-specification.md in the current git repo. Read the rest of the document and the source code only to check claims made in that section, and do not review other sections.
+>
+> Do not edit any file and do not rewrite the section. Do not propose new features, new Markdown dialects, or extra edge cases unless they contradict something already written in that section.
+>
+> Look for: contradictions within the section or with the rest of the specification, ambiguities where an implementer would have to guess, table rows whose stated output does not follow from the stated input and configuration, claims that conflict with the existing formatter code or with pulldown-cmark 0.13.4 behavior, and statements that cannot be tested.
+>
+> Report numbered findings in the chat. For each: a one-line title, a severity (high/medium/low), the exact text you are criticising, a short explanation, and a one-sentence minimal fix. End with the number of findings and a one-line list of their titles.
+
+~~1. Escaped opening brace is incorrectly claimed to create an attribute~~
+* ~~Severity: high~~
+* ~~Exact text: "`# \{.foo}` ... H1; class `foo`; parser-specific content retained"~~
+* ~~Explanation: pulldown-cmark 0.13.4 excludes an escaped opening brace during attribute-block extraction, so `\{.foo}` is ordinary text with no class.~~
+* ~~Minimal fix: Change the expected result to no metadata and literal brace text, or remove this proposed row.~~
+
+Rejected: running pulldown-cmark 0.13.4 with `ENABLE_HEADING_ATTRIBUTES` on `# \{.foo}` gives the class `foo`, as the specification says. The row is also outside the section under review.
+
+~~2. Vertical tab is incorrectly classified as embedded in a class~~
+* ~~Severity: high~~
+* ~~Exact text: "`# H {.a<U+000B>.b}` and `# H {.a<U+2002>.b}` ... Each is one class whose value includes the embedded code point and `.b`; neither character separates tokens"~~
+* ~~Explanation: pulldown-cmark splits attribute blocks with `split_ascii_whitespace`, so U+000B (a vertical tab) separates tokens; U+2002 does not, making the two markers behave differently.~~
+* ~~Minimal fix: Expect `[a]` and `[b]` for vertical tab, and a single class containing the U+2002 and `.b` for EN SPACE.~~
+
+Rejected: running pulldown-cmark 0.13.4 on `# H {.a\u{b}.b}` gives the single class `a\u{b}.b`, as the specification says. The row is also outside the section under review.
+
+3. Verified-table newline notation is ambiguous
+* Severity: low
+* Exact text: "`Heading {.foo` / `.bar}` / `===`" and "`Heading text here ...` / `.class-two ...` / underline"
+* Explanation: The table uses `/` for line breaks, while the later matrix explicitly defines `\n` as the newline notation and does not define `/`, so an implementer could treat it literally.
+* Minimal fix: Replace `/` separators in the verified table with explicit `\n` or state that `/` denotes a physical newline.
+
+3 findings
+
+1. Escaped opening brace is incorrectly claimed to create an attribute
+2. Vertical tab is incorrectly classified as embedded in a class
+3. Verified-table newline notation is ambiguous
+
+Applied: finding 3, by adding "In the table, `/` marks a physical line break." before the table.
+
+Final submission
+----------------
+
+To be completed for the final submission.
