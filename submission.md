@@ -6,8 +6,6 @@ Team name: dprint heading attributes 2
 The specification consists of the file
 [heading-attributes-2-specification.md](heading-attributes-2-specification.md).
 
-Draft submission
-----------------
 
 ### Alisher Toxanbayev
 
@@ -90,7 +88,3 @@ Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with
 
 Applied: I ran the finding. With default settings the formatter turns `#### Heading {#id} ####` into `#### Heading {#id}`, and pulldown-cmark 0.13.4 reads no ID in the input but the ID `id` in the output. This is now row 7 of the verified-behavior table. The suggested fix (preserving the closing hashes) is a change to the formatter, not to the specification, so it was not added to the text.
 
-Final submission
-----------------
-
-To be completed for the final submission.
