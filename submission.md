@@ -61,6 +61,7 @@ Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with
 | ----- | -------- | ----------------- |
 | 1 | 3 | Added the line-break notation to the verified-behavior table; not applied: two claims about matrix rows 20 and 31 that running pulldown-cmark 0.13.4 showed to be wrong. |
 | 2 | 2 | Gave a concrete fixture for row 5 and the exact underline for row 4 of the verified-behavior table. |
+| 3 | 1 | Added row 7 to the verified-behavior table after confirming that dropping closing hashes turns the brace text `{#id}` into a heading ID. |
 
 #### Last specification review
 
@@ -74,27 +75,20 @@ Prompting GitHub Copilot in VS Code (model: Fusion, effort level: standard) with
 >
 > Report numbered findings in the chat. For each: a one-line title, a severity (high/medium/low), the exact text you are criticising, a short explanation, and a one-sentence minimal fix. End with the number of findings and a one-line list of their titles.
 >
-> Report only findings about text inside that section.
->
 > Findings already considered and rejected in earlier rounds, which must not be raised again:
 > - Escaped opening brace: pulldown-cmark 0.13.4 gives the class foo for `# \{.foo}` (checked by running it); the row is also outside the section under review.
 > - Vertical tab: pulldown-cmark 0.13.4 gives the single class `a\u{b}.b` (checked by running it); the row is also outside the section under review.
 
-1. Row 5 uses an undefined placeholder instead of an executable fixture — Severity: medium
-   * Exact text: `long # ... {#my-id}`
-   * Explanation: `...` does not define the actual heading text or exact line length, so the claim that the ATX output remains on one line and the block stays intact cannot be reproduced as stated.
-   * Minimal fix: Replace the placeholder with a concrete heading string and give the exact expected output line.
-2. Row 4 does not specify the underline width or exact serialization — Severity: low
-   * Exact text: `lines kept, underline added`
-   * Explanation: The existing Setext behavior may select an underline whose width is the longest rendered line, but this row omits both the underline character sequence and its length, making the verified output ambiguous.
-   * Minimal fix: State the exact output, including the underline text and length, for example with explicit `/` line-break notation and the underline line.
+1. Closing hashes can be lost and expose a new attribute — Severity: medium
+   * Criticised text: `| 19 | #### Heading {#id} #### | ... | Keep block before closing hashes as ordinary text | ...; no ID |`
+   * Explanation: The existing ATX parser strips trailing closing hashes into AST metadata before formatting, while the generator emits a heading whose brace text now appears trailing. Pulldown-cmark can then interpret `{#id}` as a valid attribute block, changing the heading semantics from no ID to ID `id`.
+   * Minimal fix: Preserve the closing-hash suffix whenever it follows brace text, so the original heading remains `#### Heading {#id} ####`.
 
-Finding count: 2
+1 finding
 
-1. Row 5 uses an undefined placeholder instead of an executable fixture
-2. Row 4 does not specify the underline width or exact serialization
+* Closing hashes can be lost and expose a new attribute
 
-Applied: both findings. Row 5 now uses the heading `# Short words here and there making a line {#my-id}`, and row 4 states the exact output with its 13-character underline.
+Applied: I ran the finding. With default settings the formatter turns `#### Heading {#id} ####` into `#### Heading {#id}`, and pulldown-cmark 0.13.4 reads no ID in the input but the ID `id` in the output. This is now row 7 of the verified-behavior table. The suggested fix (preserving the closing hashes) is a change to the formatter, not to the specification, so it was not added to the text.
 
 Final submission
 ----------------

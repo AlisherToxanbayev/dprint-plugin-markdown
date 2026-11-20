@@ -71,6 +71,9 @@ In the table, `/` marks a physical line break.
 | 4 | setext | maintain | same as row 2 | `Heading {.foo` / `.bar}` / `=============` (13 `=`, the width of the longest line) | Yes |
 | 5 | atx | always | `# Short words here and there making a line {#my-id}` |(one line, 51 characters, block intact) | Yes |
 | 6 | atx | maintain | `Heading` / `{.foo}` / `===` | `# Heading {.foo}` | Yes |
+| 7 | atx | maintain (default) | `#### Heading {#id} ####` | `#### Heading {#id}` | No: the input has no ID, the output has ID `id` |
+
+Row 7 shows that dropping the closing hashes can also turn brace text into an attribute block.
 
 The block is not split by wrapping in ATX output, because ATX headings stay on one line. Splitting happens only for Setext output with `textWrap: always` (row 1). Row 3 shows that ordinary text can become an attribute block with default settings.
 
